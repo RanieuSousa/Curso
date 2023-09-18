@@ -1,3 +1,3 @@
-a =2
-b= 3
-print(a+b)
+numa =2
+numb= 5
+print(numa+numb)
