@@ -1,6 +1,6 @@
 # Inicialização das listas para armazenar nomes e telefones
-nomes = {}
-telefones = {}
+nomes = []
+telefones = []
 
 # Loop principal do programa
 while True:
@@ -14,12 +14,12 @@ while True:
         "5 - Sair\n"
     ))
 
-    if menu = 1:
+    if menu == 1:
         # Opção 1: Inserir um novo contato
         nome = input("Digite o nome: ")
         telefone = input("Digite o telefone: ")
-        nomes.oppend(nome)
-        telefones.oppend(telefone)
+        nomes.append(nome)
+        telefones.append(telefone)
         print("Nome e telefone inseridos com sucesso.")
     elif menu == 2:
         # Opção 2: Atualizar um contato existente
@@ -31,12 +31,12 @@ while True:
             print("Telefone atualizado com sucesso.")
         else:
             print("Nome não encontrado.")
-    elif menu = 3:
+    elif menu ==3:
         # Opção 3: Imprimir a lista de contatos
         print("Lista de Contatos:")
-        for i in range(nomes):
-            print(f"{nomes[b]}: {telefones[b]}")
-    elif menu = 4:
+        for i in range(len(nomes)):
+            print(f"{nomes[i]}: {telefones[i]}")
+    elif menu == 4:
         # Opção 4: Deletar um contato
         nome_para_deletar = input("Digite o nome a ser deletado: ")
         if nome_para_deletar in nomes:
@@ -46,7 +46,7 @@ while True:
             print("Contato deletado com sucesso.")
         else:
             print("Nome não encontrado.")
-    elif menu = 5:
+    elif menu == 5:
         # Opção 5: Sair do programa
         print("Saindo do programa.")
         break
