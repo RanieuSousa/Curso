@@ -2,12 +2,12 @@
 nomes_produtos = ["Produto A", "Produto B", "Produto C"]
 valores_produtos = [100.0, 200.0, 150.0]
 quantidades = [100, 100, 100]
+valor_frete =[50.00,40.00,10.0]
 
 
 taxa_imposto1 = 0.12
 taxa_imposto2 = 0.06
 taxa_imposto3 = 0.03
-valor_frete = 50.0
 custos_individuais = []
 
 for i in range(len(valores_produtos)):

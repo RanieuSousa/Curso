@@ -1,1 +1,1 @@
-peso = float
+peso = 
