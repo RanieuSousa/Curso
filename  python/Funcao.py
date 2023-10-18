@@ -10,19 +10,27 @@ def cadastrar_cliente(clientes, nome , email, telefone):
     
 def imprimir_clientes(clientes):
     for indice,cliente in enumerate(clientes):
-        print(f"Cliente {indice +1}")
+        print(f"Cliente {indice}")
         print(f"Nome: {cliente['Nome']} ")
         print(f"Email: {cliente['Email']} ")
         print(f"Telefone: {cliente['Telefone']} ")
         print("*********************************************")
 
-def atualizar_cliente(clientes,indice,nome,email,telefone):
-    if indice >= len(clientes) and indice < len(clientes):
-        clientes[indice]['Nome'] = Nome
-        clientes[indice]['Email'] = Email
-        clientes[indice]['Telefone'] = Telefone
+def atualizar_cliente(clientes, indice, nome, email, telefone):
+    if 0 <= indice < len(clientes):
+        clientes[indice]['Nome'] = nome
+        clientes[indice]['Email'] = email
+        clientes[indice]['Telefone'] = telefone
         print("Informações do cliente atualizadas com sucesso!")
-  
+    else:
+        print("Índice inválido. Cliente não encontrado.")
+def deletar_cliente(clientes,indice):
+    if 0 <= indice < len(clientes):
+        del clientes[indice]
+        print("Informações do cliente deletadas com sucesso!")
+    else:
+        print("Índice inválido. Cliente não encontrado.")
+    
 clientes = []
 
 while True:
@@ -30,7 +38,8 @@ while True:
        print("1. Cadastrar Cliente")
        print("2. Imprimir Cliente")
        print("3. Atualizar Cliente")
-       print("4. Sair")
+       print("4. deletar Cliente")
+       print("5. Sair")
        
        opcao = int(input("Escolhar uma opção: "))
        
@@ -47,8 +56,11 @@ while True:
            email = input("Email do cliente: ")
            telefone = input("telefone do cliente: ")
            atualizar_cliente(clientes,indice,nome,email,telefone)
-           
        elif opcao  == 4:
+           indice = int(input("Digite o número do cliente"))
+           deletar_cliente(clientes,indice)
+             
+       elif opcao  == 5:
             print("Saindo....")
             break
     
