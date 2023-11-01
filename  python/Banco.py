@@ -1,121 +1,90 @@
 import mysql.connector
 
-class ClienteEndereco:
-    def __init__(self):
-        self.conn = mysql.connector.connect(
-            user='root',
-            password='nova_senha',
-            host='127.0.0.1',
-            database='cursosenac'
-        )
-        self.cursor = self.conn.cursor()
+# Conectar ao banco de dados
+config = mysql.connector.connect(
+    host="127.0.0.1",
+    user="root",
+    password="nova_senha",
+    database="cursosenac"
+)
 
-    def inserir_cliente(self, nome, email, telefone, tipo, id_endereco):
-        query = "INSERT INTO cliente (nome, email, telefone, tipo, id_endereco) VALUES (%s, %s, %s, %s, %s)"
-        values = (nome, email, telefone, tipo, id_endereco)
-        self.cursor.execute(query, values)
-        self.conn.commit()
-        return self.cursor.lastrowid
+# Criar um cursor para executar comandos SQL
+cursor = config.cursor()
 
-    def inserir_endereco(self, cep, uf, cidade, bairro, rua, numero, complemento):
-        query = "INSERT INTO endereco (cep, uf, cidade, bairro, rua, numero, complemento) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        values = (cep, uf, cidade, bairro, rua, numero, complemento)
-        self.cursor.execute(query, values)
-        self.conn.commit()
-        return self.cursor.lastrowid
+def criar_cliente(nome, email, telefone, tipo, id_endereco):
+    sql = "INSERT INTO cliente (nome, email, telefone, tipo, id_endereco)
+    VALUES (%s, %s,%s, %s, %s)"
+    val = (nome, email, telefone, tipo, id_endereco)
+    cursor.execute(sql, val)
+    config.commit()
+    print("Cliente inserido com sucesso!")
 
-    def atualizar_cliente(self, id_cliente, nome, email, telefone, tipo, id_endereco):
-        query = "UPDATE cliente SET nome=%s, email=%s, telefone=%s, tipo=%s, id_endereco=%s WHERE idcliente=%s"
-        values = (nome, email, telefone, tipo, id_endereco, id_cliente)
-        self.cursor.execute(query, values)
-        self.conn.commit()
+def listar_clientes():
+    cursor.execute("SELECT * FROM cliente")
+    clientes = cursor.fetchall()
+    for cliente in clientes:
+        print(cliente)
 
-    def atualizar_endereco(self, id_endereco, cep, uf, cidade, bairro, rua, numero, complemento):
-        query = "UPDATE endereco SET cep=%s, uf=%s, cidade=%s, bairro=%s, rua=%s, numero=%s, complemento=%s WHERE idendereco=%s"
-        values = (cep, uf, cidade, bairro, rua, numero, complemento, id_endereco)
-        self.cursor.execute(query, values)
-        self.conn.commit()
+def atualizar_cliente(idcliente, nome, email, telefone, tipo, id_endereco):
+    sql = "UPDATE cliente SET nome = %s, email = %s,
+    telefone = %s, tipo = %s,id_endereco = %s 
+    WHERE idcliente = %s"
+    val = (nome, email, telefone, tipo, id_endereco, idcliente)
+    cursor.execute(sql, val)
+    config.commit()
+    print("Cliente atualizado com sucesso!")
 
-    def imprimir_clientes(self):
-        query = "SELECT * FROM cliente"
-        self.cursor.execute(query)
-        for row in self.cursor.fetchall():
-            print(row)
+def deletar_cliente(idcliente):
+    sql = "DELETE FROM cliente WHERE idcliente = %s"
+    val = (idcliente,)
+    cursor.execute(sql, val)
+    config.commit()
+    print("Cliente excluído com sucesso!")
 
-    def imprimir_enderecos(self):
-        query = "SELECT * FROM endereco"
-        self.cursor.execute(query)
-        for row in self.cursor.fetchall():
-            print(row)
-
-    def deletar_cliente(self, id_cliente):
-        query = "DELETE FROM cliente WHERE idcliente=%s"
-        self.cursor.execute(query, (id_cliente,))
-        self.conn.commit()
-
-    def deletar_endereco(self, id_endereco):
-        query = "DELETE FROM endereco WHERE idendereco=%s"
-        self.cursor.execute(query, (id_endereco,))
-        self.conn.commit()
-
-    def close(self):
-        self.conn.close()
-
-def exibir_menu():
-    print("1. Inserir Cliente")
-    print("2. Inserir Endereço")
-    print("3. Atualizar Cliente")
-    print("4. Listar Clientes")
-    print("5. Sair")
-
-def main():
-    ce = ClienteEndereco()
-
+def menu():
     while True:
-        exibir_menu()
-        escolha = input("Escolha uma opção: ")
+        print("\nMenu:")
+        print("1. Criar Cliente")
+        print("2. Listar Clientes")
+        print("3. Atualizar Cliente")
+        print("4. Deletar Cliente")
+        print("5. Sair")
+
+        escolha = input("Escolha a opção (1/2/3/4/5): ")
 
         if escolha == "1":
             nome = input("Nome do Cliente: ")
             email = input("Email: ")
             telefone = input("Telefone: ")
-            tipo = input("Tipo (Pessoa Física ou Jurídica): ")
-            id_endereco = int(input("ID do Endereço: "))
-            ce.inserir_cliente(nome, email, telefone, tipo, id_endereco)
+            tipo = input("Tipo: ")
+            id_endereco = input("ID do Endereço: ")
+            criar_cliente(nome, email, telefone, tipo, id_endereco)
             print("Cliente inserido com sucesso!")
-
         elif escolha == "2":
-            cep = input("CEP: ")
-            uf = input("UF: ")
-            cidade = input("Cidade: ")
-            bairro = input("Bairro: ")
-            rua = input("Rua: ")
-            numero = input("Número: ")
-            complemento = input("Complemento: ")
-            ce.inserir_endereco(cep, uf, cidade, bairro, rua, numero, complemento)
-            print("Endereço inserido com sucesso!")
-
+            print("\nLista de Clientes:")
+            listar_clientes()
         elif escolha == "3":
-            cliente_id = int(input("ID do Cliente a ser atualizado: "))
+            idcliente = input("ID do Cliente a ser atualizado: ")
             nome = input("Novo Nome: ")
             email = input("Novo Email: ")
             telefone = input("Novo Telefone: ")
-            tipo = input("Novo Tipo (Pessoa Física ou Jurídica): ")
-            id_endereco = int(input("Novo ID do Endereço: "))
-            ce.atualizar_cliente(cliente_id, nome, email, telefone, tipo, id_endereco)
-            print(f"Cliente com ID {cliente_id} atualizado com sucesso!")
-
+            tipo = input("Novo Tipo: ")
+            id_endereco = input("Novo ID do Endereço: ")
+            atualizar_cliente(idcliente, nome, email, telefone, tipo, id_endereco)
+            print("Cliente atualizado com sucesso!")
         elif escolha == "4":
-            print("Lista de Clientes:")
-            ce.imprimir_clientes()
-
+            idcliente = input("ID do Cliente a ser deletado: ")
+            deletar_cliente(idcliente)
+            print("Cliente excluído com sucesso!")
         elif escolha == "5":
-            ce.close()
-            print("Programa encerrado.")
+            print("Encerrando o programa.")
             break
-
         else:
-            print("Opção inválida. Tente novamente.")
+            print("Escolha uma opção válida.")
 
 if __name__ == "__main__":
-    main()
+    menu()
+
+    # Fechar o cursor e a conexão com o banco de dados
+    cursor.close()
+    config.close()
